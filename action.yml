@@ -38,3 +38,16 @@ runs:
        fetch-tags: true
        submodules: recursive
        token: ${{ steps.hedge-private-repos.outputs.token }}
+
+   - name: Configure Git credential helper
+     shell: bash
+     run: |
+       git config --global credential.helper store
+       echo "https://x-access-token:${{ inputs.github-token }}@github.com" > ~/.git-credentials
+
+   - name: Import Codesign Certificates
+     uses: apple-actions/import-codesign-certs@v3
+     with:
+       keychain: ${{ inputs.keychain-name }}
+       p12-file-base64: ${{ inputs.macos-certificates }}
+       p12-password: ${{ inputs.macos-certificates-password }}
