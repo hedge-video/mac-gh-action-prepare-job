@@ -43,7 +43,7 @@ runs:
      shell: bash
      run: |
        git config --global credential.helper store
-       echo "https://x-access-token:${{ inputs.github-token }}@github.com" > ~/.git-credentials
+       echo "https://x-access-token:${{ steps.hedge-private-repos.outputs.token }}@github.com" > ~/.git-credentials
 
    - name: Import Codesign Certificates
      uses: apple-actions/import-codesign-certs@v3
