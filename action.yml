@@ -1,0 +1,40 @@
+name: 'Prepare macOS Job'
+description: 'Gets app token, checks out code, and sets up credentials/certificates for macOS workflows'
+inputs:
+  app-id:
+    description: 'GitHub App ID'
+    required: true
+  app-private-key:
+    description: 'GitHub App Private Key'
+    required: true
+  owner:
+    description: 'Repository owner'
+    required: true
+  keychain-name:
+    description: 'Keychain name to use'
+    required: true
+  macos-certificates:
+    description: 'macOS developer certificates in base64'
+    required: true
+  macos-certificates-password:
+    description: 'Password for macOS certificates'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+   - name: Get private repos app token
+     id: hedge-private-repos
+     uses: actions/create-github-app-token@v1
+     with:
+       app-id: ${{ inputs.app-id }}
+       private-key: ${{ inputs.app-private-key }}
+       owner: ${{ inputs.owner }}
+
+   - name: Checkout code
+     uses: actions/checkout@v4
+     with:
+       fetch-depth: 0
+       fetch-tags: true
+       submodules: recursive
+       token: ${{ steps.hedge-private-repos.outputs.token }}
