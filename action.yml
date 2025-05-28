@@ -7,9 +7,6 @@ inputs:
   app-private-key:
     description: 'GitHub App Private Key'
     required: true
-  repo-path:
-    description: 'Path to the repo'
-    required: true
   owner:
     description: 'Repository owner'
     required: true
@@ -46,7 +43,8 @@ runs:
      shell: bash
      run: |
        git config --global credential.helper store
-       echo "https://x-access-token:${{ steps.hedge-private-repos.outputs.token }}@github.com" > ${{ inputs.repo-path }}/.git-credentials
+       echo "https://x-access-token:${{ steps.hedge-private-repos.outputs.token }}@github.com" > ~/.git-credentials
+
 
    - name: Import Codesign Certificates
      uses: apple-actions/import-codesign-certs@v3
